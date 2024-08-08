@@ -1,0 +1,22 @@
+version: '3'
+services:
+  flask-web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${FLASK_RUN_PORT}:${FLASK_RUN_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - ngrok
+
+  ngrok:
+    image: wernight/ngrok
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: ngrok http flask-web:8000
+    ports:
+      - "4040:4040"
