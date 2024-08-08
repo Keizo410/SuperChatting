@@ -1,25 +1,103 @@
-import subprocess
-import huggingface_hub
-from flask import Flask, request, abort
+from flask import Flask, request, abort, render_template
 import requests
 from dotenv import load_dotenv
 import os
 import xml.etree.ElementTree as ET
-import time
-from pytchat import LiveChat
 from multiprocessing import Process, Manager, freeze_support
 import pytchat 
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import psycopg2
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
+
+
+@app.before_request
+def initialize_database():
+    try:
+        # Load SQL queries from the file
+        queries = load_sql_queries('./db/queries/initialize.sql').split(';')
+        
+        # Remove any empty queries from the list
+        queries = [query.strip() for query in queries if query.strip()]
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(queries[0])
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+        print("Database and tables created successfully!")
+    except (Exception, psycopg2.Error) as error:
+        print(f"Error while creating database: {error}")
 
 @app.route('/')
 def welcome():
     return "Welcome to the home"
+
+@app.route('/add')
+def add():
+    try:
+        # Load SQL queries from the file
+        queries = load_sql_queries('./db/queries/initialize.sql').split(';')
+        
+        # Remove any empty queries from the list
+        queries = [query.strip() for query in queries if query.strip()]
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+
+        cur.execute(queries[1])
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+        
+        return "Database and tables created successfully!", 200
+    except (Exception, psycopg2.Error) as error:
+        return f"Error while creating database: {error}", 500
+
+@app.route('/view')
+def view():
+    try:
+        # Load SQL query from the file
+        query = load_sql_queries('./db/queries/view.sql').strip() 
+
+        # Get database connection
+        conn = get_db_connection()
+
+        # Create a cursor object
+        cur = conn.cursor()
+        
+        # Execute the SQL query
+        cur.execute(query)
+        
+        # Fetch all results
+        results = cur.fetchall()
+        
+        # Get column names
+        columns = [desc[0] for desc in cur.description]
+
+        # Close the cursor and connection
+        cur.close()
+        conn.close()
+
+        # Format results as a list of dictionaries
+        data = [dict(zip(columns, row)) for row in results]
+
+        # Return results as a JSON response
+        return render_template('view.html', data=data, columns=columns)
+    
+    except (Exception, psycopg2.Error) as error:
+        return f"Error while fetching data: {error}", 500
+
 
 @app.route('/send_mail')
 def send_email():
@@ -76,6 +154,23 @@ def youtube_callback():
             abort(415)  # Unsupported Media Type
     else:
         abort(405)
+
+def load_sql_queries(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
+
+def create_dictionary():
+    pass
+
+def get_db_connection():
+    conn = psycopg2.connect(
+            database=os.getenv("DATABASE"),
+            user=os.getenv("USER"),
+            password=os.getenv("PASSWORD"),
+            host=os.getenv("HOST"),
+            port=os.getenv("PORT")
+            )
+    return conn
 
 def is_livestream(video_id):
     API_KEY =  os.getenv('API_KEY')
