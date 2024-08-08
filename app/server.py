@@ -108,12 +108,7 @@ def process_livechat(vd):
 
 def get_grok_url():
     try:
-        # ngrok = subprocess.Popen(['C:/Users/iek42/ngrok/ngrok-v3-stable-windows-amd64/ngrok', 'http', '8000'], stdout=subprocess.PIPE)
-        ngrok_process = subprocess.Popen([
-            'ngrok', 'http', '8000'
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        time.sleep(5)
-        response = requests.get('http://localhost:4040/api/tunnels')
+        response = requests.get('http://ngrok:4040/api/tunnels')
         tunnels = response.json()['tunnels']
         for tunnel in tunnels:
             if tunnel['proto'] == 'https':
@@ -157,4 +152,4 @@ if __name__ == '__main__':
     manager = Manager()
     vd = manager.Value(str, "")
     subscribe_to_channel()
-    app.run(port=int(os.getenv("FLASK_RUN_PORT", 8000)))
+    app.run(host='0.0.0.0', port=int(os.getenv("FLASK_RUN_PORT", 8000)))
