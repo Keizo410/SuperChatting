@@ -41,7 +41,6 @@ API_KEY='YOUR_YOUTUBE_API_KEY'
 API_URL='https://www.googleapis.com/youtube/v3/videos'
 HUB_URL=https://pubsubhubbub.appspot.com/subscribe
 TOPIC_URL='https://www.youtube.com/xml/feeds/videos.xml?channel_id=YOUR_CHANNEL_ID'
-CALLBACK_URL='YOUR_CALLBACK_URL'
 
 NGROK_AUTHTOKEN=YOUR_NGROK_AUTHTOKEN
 APP_PASSWORD="YOUR_EMAIL_APP_PASSWORD"
