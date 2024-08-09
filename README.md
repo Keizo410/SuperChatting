@@ -71,11 +71,11 @@ Once the containers are running, you can access the Flask application at: __http
 ### API Endpoints
 
 - **GET `/`**: Initialize the database and summarize data.
-- **GET `/create`**: Create the necessary database tables.
-- **GET `/drop`**: Drop the existing database tables.
-- **GET `/add`**: Insert sample data into the database.
+- **POST `/create`**: Create the necessary database tables.
+- **DELETE `/drop`**: Drop the existing database tables.
+- **POST `/add`**: Insert sample data into the database.
 - **GET `/view`**: View the contents of the `livechat_data` and `author_total` tables.
-- **GET `/send_mail`**: Send an email with the CSV file attached.
+- **POST `/send_mail`**: Send an email with the CSV file attached.
 - **POST `/youtube-callback`**: Handle YouTube PubSubHubbub notifications for live chat tracking.
 
 ### CSV Export
