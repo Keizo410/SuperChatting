@@ -1,5 +1,5 @@
 I dont have money to deploy this, so might be deployed later.
-
+Main core functionality is implemeneted at this moment.
 # Superchat Tracking System
 
 This project is a Dockerized Flask-based web application for tracking YouTube live chat superchats, with data stored in a PostgreSQL database. The application allows you to track live chat messages, aggregate superchat amounts by author, and send the data as a CSV file via email.
