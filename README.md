@@ -102,6 +102,8 @@ To run the application locally without Docker, ensure you have Python and Postgr
 
     ```bash
     flask run
+    or
+    python server.py
     ```
 
 ### Database Setup
