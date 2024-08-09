@@ -41,7 +41,7 @@ def welcome():
     summarize()
     return "Welcome to the home"
 
-@app.route('/create')
+@app.route('/create', methods=['POST'])
 def create():
     try:
         queries = load_sql_queries('./db/queries/initialize.sql').split(';')
@@ -59,7 +59,7 @@ def create():
     except (Exception, psycopg2.Error) as error:
         return f"Error while creating table: {error}", 500
 
-@app.route('/drop')
+@app.route('/drop', methods=['DELETE'])
 def drop():
     try:
         queries = load_sql_queries('./db/queries/drop.sql').split(';')
@@ -77,7 +77,7 @@ def drop():
     except (Exception, psycopg2.Error) as error:
         return f"Error while dropping table: {error}", 500
 
-@app.route('/add')
+@app.route('/add', methods=['POST'])
 def add():
     try:
         queries = load_sql_queries('./db/queries/initialize.sql').split(';')
@@ -95,7 +95,7 @@ def add():
     except (Exception, psycopg2.Error) as error:
         return f"Error while adding data: {error}", 500
 
-@app.route('/view')
+@app.route('/view', methods=['GET'])
 def view():
     try:
         query = load_sql_queries('./db/queries/view.sql').split(';')
@@ -113,7 +113,7 @@ def view():
     except (Exception, psycopg2.Error) as error:
         return f"Error while fetching data: {error}", 500
 
-@app.route('/send_mail')
+@app.route('/send_mail', methods=['POST'])
 def send_email():
     from_email = os.getenv("SENDER_EMAIL")
     password = os.getenv('APP_PASSWORD')
