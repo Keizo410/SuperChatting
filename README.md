@@ -33,28 +33,26 @@ cd superchat-tracker
 Create a .env file in the project root directory with the following variables:
 
 ```bash
-# PostgreSQL
+FLASK_APP=server.py
+FLASK_ENV=development
+FLASK_RUN_PORT=8000
+
+API_KEY='YOUR_YOUTUBE_API_KEY'
+API_URL='https://www.googleapis.com/youtube/v3/videos'
+HUB_URL=https://pubsubhubbub.appspot.com/subscribe
+TOPIC_URL='https://www.youtube.com/xml/feeds/videos.xml?channel_id=YOUR_CHANNEL_ID'
+CALLBACK_URL='YOUR_CALLBACK_URL'
+
+NGROK_AUTHTOKEN=YOUR_NGROK_AUTHTOKEN
+APP_PASSWORD="YOUR_EMAIL_APP_PASSWORD"
+SENDER_EMAIL="YOUR_SENDER_EMAIL"
+RECEIVER_EMAIL="YOUR_RECEIVER_EMAIL"
+
 DATABASE=your_database_name
 USER=your_database_user
 PASSWORD=your_database_password
-HOST=db
-PORT=5432
-
-# YouTube API
-API_KEY=your_youtube_api_key
-API_URL=https://www.googleapis.com/youtube/v3/videos
-
-# Email Settings
-SENDER_EMAIL=your_email@example.com
-APP_PASSWORD=your_email_app_password
-RECEIVER_EMAIL=recipient_email@example.com
-
-# ngrok
-CALLBACK_URL=your_ngrok_callback_url
-
-# YouTube PubSubHubBub
-HUB_URL=https://pubsubhubbub.appspot.com/subscribe
-TOPIC_URL=https://www.youtube.com/xml/feeds/videos.xml?channel_id=your_channel_id
+HOST=your_database_host
+PORT=your_database_port
 ```
 
 ### 3. Build and run docker
